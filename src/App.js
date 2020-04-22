@@ -1,25 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { Grid } from "@material-ui/core";
+
+import "./App.css";
+
+import { MainVideo, VideoList, SearchBar } from "./components";
+import { youtube, apikey } from "./utils";
 
 function App() {
+  const [videos, setVideos] = useState([]);
+  const [activeVideo, setActiveVideo] = useState(null);
+  const [keyword, setKeyWord] = useState("cats");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const {
+        data: { items },
+      } = await youtube.get("search", {
+        params: {
+          maxResults: 10,
+          q: keyword,
+          part: "snippet",
+          type: "video",
+          key: apikey,
+        },
+      });
+
+      setVideos(await items);
+      setActiveVideo(items[0]);
+    };
+
+    fetchData();
+  }, [keyword]);
+
+  const handleSelectVideo = (video) => {
+    setActiveVideo(video);
+  };
+
+  if (!videos) return null;
+  if (!activeVideo) return null;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <SearchBar keyword={keyword} onSubmit={setKeyWord} />
+      </Grid>
+
+      <div className="main-container">
+        <MainVideo video={activeVideo} />
+
+        <VideoList videos={videos} onSelectVideo={handleSelectVideo} />
+      </div>
+      {/* <pre>{JSON.stringify(videos, null, 2)}</pre> */}
+    </Grid>
   );
 }
 
