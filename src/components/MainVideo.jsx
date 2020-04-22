@@ -18,11 +18,8 @@ const MainVideo = ({ video }) => {
           frameborder="0"
         ></iframe>
       </div>
-      <Paper elevation={3} style={{ padding: ".3em" }}>
-        <Typography
-          variant="h4"
-          style={{ marginTop: ".5em", fontWeight: "bold" }}
-        >
+      <Paper elevation={3} style={{ padding: "1em" }}>
+        <Typography variant="h4" style={{ fontWeight: "bold" }}>
           {title} - {channelTitle}
         </Typography>
         <Typography variant="subtitle1">{channelTitle}</Typography>
