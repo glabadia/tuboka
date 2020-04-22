@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
+import { Helmet } from "react-helmet";
 
 import "./App.css";
 
@@ -39,18 +40,23 @@ function App() {
   if (!videos) return null;
   if (!activeVideo) return null;
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <SearchBar keyword={keyword} onSubmit={setKeyWord} />
+    <>
+      <Helmet>
+        <title>{activeVideo.snippet.title}</title>
+      </Helmet>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <SearchBar keyword={keyword} onSubmit={setKeyWord} />
+        </Grid>
+
+        <div className="main-container">
+          <MainVideo video={activeVideo} />
+
+          <VideoList videos={videos} onSelectVideo={handleSelectVideo} />
+        </div>
+        {/* <pre>{JSON.stringify(videos, null, 2)}</pre> */}
       </Grid>
-
-      <div className="main-container">
-        <MainVideo video={activeVideo} />
-
-        <VideoList videos={videos} onSelectVideo={handleSelectVideo} />
-      </div>
-      {/* <pre>{JSON.stringify(videos, null, 2)}</pre> */}
-    </Grid>
+    </>
   );
 }
 
